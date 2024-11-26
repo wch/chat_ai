@@ -48,10 +48,6 @@ else:
     from typing import ParamSpec, TypeGuard
 
 
-client = AsyncOpenAI(
-    api_key=os.environ["OPENAI_API_KEY"],  # this is also the default, it can be omitted
-)
-
 DEFAULT_MODEL: OpenAiModel = "gpt-3.5-turbo"
 DEFAULT_SYSTEM_PROMPT = "You are a helpful assistant."
 DEFAULT_TEMPERATURE = 0.7
@@ -347,8 +343,12 @@ class chat_server:
                 print(f"TOKENS USED: {tokens_total}")
 
             extra_kwargs = {}
-            if self.url() is not None:
-                extra_kwargs["url"] = self.url()
+	    
+
+            client = AsyncOpenAI(
+                base_url=self.url(),
+                api_key="test",
+            )
 
             # Launch a Task that updates the chat string asynchronously. We run this in
             # a separate task so that the data can come in without need to await it in
